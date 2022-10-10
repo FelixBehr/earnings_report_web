@@ -28,4 +28,16 @@ const Earnings = (props: EarningsProps) => {
     </div>
 }
 
+// This also gets called at build time
+export async function getStaticProps({}) {
+
+    // Pass post data to the page via props
+    return {
+        props: {
+            label: '',
+            earnings: []
+        }
+    }
+}
+
 export default Earnings

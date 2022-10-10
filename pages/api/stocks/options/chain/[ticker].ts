@@ -33,6 +33,7 @@ export default async function handler(
         const differenceInSeconds = yearsUntilExpiration.diff(now, 'seconds');
         const differenceInDays = differenceInSeconds / 86400.0;
         const differenceInYears = differenceInDays / 365.0;
+        // @ts-ignore
         const dividendRate = options.quote.trailingAnnualDividendRate / 100.0;
         option.puts = option.puts.map(put => {
             put.greeks = {
@@ -42,6 +43,7 @@ export default async function handler(
                 theta: greeks.getTheta(options.quote.ask, put.strike, differenceInYears, put.impliedVolatility, dividendRate, "put"),
                 rho: greeks.getRho(options.quote.ask, put.strike, differenceInYears, put.impliedVolatility, dividendRate, "put"),
             }
+            // @ts-ignore
             put.dividendPercentage = (((put.ask + put.bid) / 2)/ put.strike) * 100
             return put;
         })
@@ -54,6 +56,7 @@ export default async function handler(
                 theta: greeks.getTheta(options.quote.ask, call.strike, differenceInYears, call.impliedVolatility, dividendRate, "call"),
                 rho: greeks.getRho(options.quote.ask, call.strike, differenceInYears, call.impliedVolatility, dividendRate, "call"),
             }
+            // @ts-ignore
             call.dividendPercentage = (((call.ask + call.bid) / 2) / call.strike) * 100
             return call;
         })

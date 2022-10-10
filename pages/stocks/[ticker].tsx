@@ -1,4 +1,5 @@
 import type {NextPage, GetServerSideProps} from 'next'
+import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from 'react';
 import useSWR from 'swr';
 import fetcher from "../../swr-fetcher";
 
@@ -7,15 +8,17 @@ type TickerPageProps = {
 }
 
 function getUpperBound(highestChangeLast4?: number, currentPrice?: number): number {
+    // @ts-ignore
     return currentPrice + ((highestChangeLast4 / 100) * currentPrice)
 }
 
 function getLowerBound(highestChangeLast4?: number, currentPrice?: number): number {
+    // @ts-ignore
     return currentPrice - ((highestChangeLast4 / 100) * currentPrice)
 }
 
 
-const OptionsTable = (props) => {
+const OptionsTable = (props: { label: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal | null | undefined; options: any[]; }) => {
     return <div>
         <p>{props.label}</p>
         <table className="table-auto w-full">
@@ -60,8 +63,8 @@ const TickerPage: NextPage<TickerPageProps> = (props) => {
     const lowerBound = getLowerBound(highestChangeData?.highestChangeLast4, priceData?.price)
     const upperBound = getUpperBound(highestChangeData?.highestChangeLast4, priceData?.price)
 
-    const fittingCallOptions = chainData?.options[0].calls.filter(call => call.strike > upperBound);
-    const fittingPutOptions = chainData?.options[0].puts.filter(put => put.strike < lowerBound).reverse();
+    const fittingCallOptions = chainData?.options[0].calls.filter((call: { strike: number; }) => call.strike > upperBound);
+    const fittingPutOptions = chainData?.options[0].puts.filter((put: { strike: number; }) => put.strike < lowerBound).reverse();
 
     return <div className="container mx-auto h-screen">
 

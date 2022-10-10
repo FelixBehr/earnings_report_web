@@ -1,8 +1,6 @@
 import Earning from "../../../types/Earning";
-import {useEffect, useState} from "react";
 import Link from "next/link";
 import useSWR from "swr";
-import fetcher from "../../../swr-fetcher";
 
 type EarningRowProps = {
     earning: Earning
@@ -55,6 +53,17 @@ const EarningRow = (props: EarningRowProps) => {
         <td className="p-4"><LastHighestChange ticker={props.earning.ticker}/></td>
         <td className="p-4"><Price ticker={props.earning.ticker}/></td>
     </tr>
+}
+
+// This also gets called at build time
+export async function getStaticProps({}) {
+
+    // Pass post data to the page via props
+    return {
+        props: {
+            earning: {ticker: '', previousClosingPrice: 0.0}
+        }
+    }
 }
 
 export default EarningRow;
