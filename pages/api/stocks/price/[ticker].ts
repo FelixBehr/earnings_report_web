@@ -1,8 +1,9 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type {NextApiRequest, NextApiResponse} from 'next'
+import yahooFinance from 'yahoo-finance2';
 
-type Data = {
-    name: string
+type ResponseData = {
+    name: string,
+    price?: number
 }
 
 type RequestData = {
@@ -13,11 +14,13 @@ interface StockPriceTickerRequest extends NextApiRequest {
     query: RequestData
 }
 
-export default function handler(
+export default async function handler(
     req: StockPriceTickerRequest,
-    res: NextApiResponse<Data>
+    res: NextApiResponse<ResponseData>
 ) {
     const {ticker} = req.query;
 
-    res.status(200).json({name: ticker})
+    const quote = await yahooFinance.quote(ticker)
+
+    res.status(200).json({name: ticker, price: quote?.ask})
 }

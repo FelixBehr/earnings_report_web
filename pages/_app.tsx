@@ -1,8 +1,12 @@
 import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import type {AppProps} from 'next/app'
+import {SWRConfig} from 'swr'
+import fetcher from "../swr-fetcher";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+function EarningsReportWeb({Component, pageProps}: AppProps) {
+    return <SWRConfig value={{refreshInterval: 30000, fetcher: fetcher}}>
+        <Component {...pageProps} />
+    </SWRConfig>
 }
 
-export default MyApp
+export default EarningsReportWeb
